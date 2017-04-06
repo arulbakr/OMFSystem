@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC '-//Hibernate/Hibernate Mapping DTD 3.0//EN' 'http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+	<class name="stock.entities.CountryEntity" table="countries">
+		<id name="CountryID" type="integer" column="CountryID">
+			<generator class="native" />
+		</id>
+		<property name="Name" type="string" column="Name" />
+		<property name="ActiveIndicator" type="string" column="ActiveIndicator" />
+	</class>
+	<class name="stock.entities.FundTypeEntity" table="fundtypes">
+		<id name="FundTypeId" type="integer" column="FundTypeId">
+			<generator class="native" />
+		</id>
+		<property name="Description" type="string" column="Description" />
+		<property name="commPercent" column="CommPercent" precision="3" scale="2"/>
+		<property name="returnPercent" column="ReturnPercent" precision="3" scale="2" />
+		<property name="ActiveIndicator" type="string" column="ActiveIndicator" />
+	</class>
+	<class name="stock.entities.UserEntity" table="users">
+		<id name="userID" type="integer" column="UserID">
+			<generator class="native" />
+		</id>
+		<property name="FullName" type="string" column="FullName" />
+		<property name="password" type="string" column="Password" />
+		<property name="emailId" type="string" column="Email" />
+		<property name="passport" type="string" column="PassportNo" />
+		<property name="contactNo" type="string" column="ContactNo" />
+		<property name="gender" type="string" column="Gender" />
+		<property name="dateOfBirth" type="date" column="DateOfBirth" />
+		<property name="city" type="string" column="City" />
+		<property name="address" type="string" column="Address" />
+		<property name="state" type="string" column="State" />
+		<property name="postalCode" type="string" column="PostalCode" />
+		<many-to-one name="country" class="stock.entities.CountryEntity" fetch="select">
+            <column name="CountryID" not-null="false" />
+        </many-to-one>
+        <set name="userFunds" table="userfunds"
+				inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userId" not-null="false" />
+            </key>
+            <one-to-many class="stock.entities.UserFundEntity" />
+        </set>
+		<property name="activeIndicator" type="string" column="ActiveIndicator" />
+	</class>
+	<class name="stock.entities.UserFundEntity" table="userfunds">
+		<id name="userFundId" type="integer" column="UserFundId">
+			<generator class="native" />
+		</id>
+		<property name="userId" type="integer" column="UserId" />
+		<property name="amount" type="float" column="Amount" />
+		<property name="maturedAmount" type="float" column="MaturedAmount" />
+		<property name="activeIndicator" type="string" column="ActiveIndicator" />
+		<property name="dateCreated" type="date" column="DateCreated" />
+		<property name="dateModified" type="date" column="DateModified" />
+		<many-to-one name="fundType" class="stock.entities.FundTypeEntity" fetch="select">
+            <column name="FundTypeId" not-null="false" />
+        </many-to-one>
+	</class>
+</hibernate-mapping>
